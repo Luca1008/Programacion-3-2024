@@ -92,7 +92,7 @@ public class linkedList<T> implements Iterable<T> {
         if (data == null) {
             throw new IllegalArgumentException("La data no puede ser nula");
         }
-        if(this.first != null){
+        if(this.isEmpty()){
             Node<T> current = this.first;
             for(int i=0;i<this.size;i++) {
                 if(data.equals(current.getData())){

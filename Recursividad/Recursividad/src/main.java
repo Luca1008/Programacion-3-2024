@@ -1,4 +1,4 @@
-import Busquedabinaria;
+
 
 public class main {
     public static void main(String[] args) throws Exception {
@@ -11,7 +11,7 @@ public class main {
 
         Busquedabinaria asd = new Busquedabinaria();
 
-        System.out.println(asd.BinariaRecursividad(nemerosOdenados, 0, 19, 8););
+        System.out.println(asd.BinariaRecursividad(numerosOrdenados, 0, 19, 8));
 
     }
 }

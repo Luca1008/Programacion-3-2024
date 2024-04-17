@@ -1,4 +1,5 @@
 import java.util.NoSuchElementException;
+import java.util.Iterator;
 
 public class linkedList<T> implements Iterable<T> {
     private Node<T> first;
@@ -27,7 +28,7 @@ public class linkedList<T> implements Iterable<T> {
             Node<T> node = this.first;
             this.first = this.first.getNext();
             this.size--;
-            return node;
+            return node.getData();
         }
         return null;
     }
@@ -78,14 +79,14 @@ public class linkedList<T> implements Iterable<T> {
     } */
 
     public T getNode(int index) {
-        if(index < 0 || index >= size()) { 
+        if(index < 0 || index >= this.size) { 
             throw new IndexOutOfBoundsException("Indice esta fuera del rango");
         }
         Node<T> current = this.first;
         for(int i=0;i<index;i++) {
             current = current.getNext();
         }
-        return current;
+        return current.getData();
     }
 
     public int getPosNode(T data){
@@ -107,9 +108,34 @@ public class linkedList<T> implements Iterable<T> {
     }
 
 
+    // Implementación del método iterator()
     @Override
     public Iterator<T> iterator() {
-        return new Iterator<T>(this.first);
+        return new LinkedListIterator<>(this.first);
+    }
+
+    // Clase interna para la implementación del iterador
+    private class LinkedListIterator<T> implements Iterator<T> {
+        private Node<T> currentNode;
+
+        public LinkedListIterator(Node<T> first) {
+            this.currentNode = first;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return currentNode != null;
+        }
+
+        @Override
+        public T next() {
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
+            T data = currentNode.getData();
+            currentNode = currentNode.getNext();
+            return data;
+        }
     }
 
 

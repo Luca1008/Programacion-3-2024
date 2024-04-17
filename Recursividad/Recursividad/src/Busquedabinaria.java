@@ -9,13 +9,13 @@ public class Busquedabinaria {
         if (start > end) {
             return -1;
         } else {
-            med = start + end/ 2;
+            mid = start + end/ 2;
             if (x > array[mid]) {
                 return BinariaRecursividad(array,mid + 1, end, x);
             } else if (x < array[mid]) {
                 return BinariaRecursividad(array,start, mid - 1, x);  
             } else{
-                return med;
+                return mid;
             }
         }
     }

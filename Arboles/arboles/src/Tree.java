@@ -1,6 +1,8 @@
 import java.util.ArrayList;
 import java.util.List;
 
+import org.w3c.dom.Node;
+
 public class Tree {
 
 	private TreeNode root;
@@ -37,6 +39,9 @@ public class Tree {
 	//complejidad:
 	//
 	public int getRoot(){
+		if (!this.isEmpty()){
+			return -1;
+		}
 		return this.root.getValue();
 	}
 	
@@ -48,21 +53,82 @@ public class Tree {
 
 	//complejidad:
 	//
-	public boolean hasElem(){
-		return !isEmpty();
+
+	public boolean hasElem(Integer value) {
+		return this.hasElem(this.root, value);
+	}
+
+	private boolean hasElem(TreeNode node, Integer value) {
+		if (this.isEmpty()) {
+			return false;
+		} else {
+			int result = node.getValue().compareTo(value);
+			if (result == 0) {
+				return true;
+			} else {
+				if (result > 0) {// Si es mayor Va por derecha
+					return hasElem(node.getRight(), value);
+				} else {// Si es menor busca por la izquierda
+					return hasElem(node.getLeft(), value);
+				}
+			}
+		}
+	}
+	
+	//complejidad:
+	//
+	public void delete(Integer value) {
+		root = this.deleteNode(root, value);
+	}
+
+	private TreeNode deleteNode(TreeNode actual, Integer value) {
+		//funcion  de corte
+		if (actual == null) {
+			return null;
+		}
+		//
+		int state = value.compareTo(actual.getValue());
+		if (state < 0) {
+			actual.setLeft(deleteNode(actual.getLeft(), value));
+		} else if (state > 0) {
+			actual.setRight(deleteNode(actual.getRight(), value));
+		} else {
+			if (actual.getLeft() == null) {
+				return actual.getRight();
+			} else if (actual.getRight() == null) {
+				return actual.getLeft();
+			}
+
+			Integer valueMoreLeft = findNodeMoreLeft(actual.getRight());
+			actual.setValue(valueMoreLeft);
+			actual.setRight(deleteNode(actual.getRight(), actual.getValue()));
+		}
+
+		return actual;
+	}
+
+	private Integer findNodeMoreLeft(TreeNode node) {
+		if (node.getLeft() == null) {
+			return node.getValue();
+		}
+		return findNodeMoreLeft(node.getLeft());
 	}
 
 	//complejidad:
 	//
-	public boolean deleteElem(int x){
-		return false;
+	public int getHeight() {
+		return getHeightTree(root);
 	}
 
-	//complejidad:
-	//
-	public int getHeight(){
-		return 0;
+	private int getHeightTree(TreeNode node) {
+		if (node == null) {
+			return 0;
+		}
+		int heightLeft = getHeightTree(node.getLeft());
+		int heightRight = getHeightTree(node.getRight());
+		return Math.max(heightLeft, heightRight) + 1;
 	}
+
 
 	//complejidad:
 	//

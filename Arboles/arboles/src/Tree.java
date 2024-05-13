@@ -132,48 +132,144 @@ public class Tree {
 
 	//complejidad:
 	//
-	public void printPosOrden(){
+	public void printPosOrder() {
+		if (isEmpty()) {
+			System.out.println("Arbol vacío");
+		} else {
+			System.out.println("\nImpresión Pos Order");
+			printPosOrder(this.root);
+		}
+	}
 
+	private void printPosOrder(TreeNode node) {
+		if (node != null) {
+			printPosOrder(node.getLeft());
+			printPosOrder(node.getRight());
+			System.out.print(" - " + node.getValue());
+		}
 	}
 
 	//complejidad:
 	//
-	public void printPreOrden(){
+	public void printPreOrder() {
+		if (isEmpty()) {
+			System.out.println("Arbol vacío");
+		} else {
+			System.out.println("\nImpresión Pre Order");
+			printPreOrder(this.root);
+		}
+	}
 
+	private void printPreOrder(TreeNode node) {
+		if (node != null) {
+			if (node.hasCharacter()) {
+				System.out.print(" - " + node.getValue() + "|" + node.getCharacter());
+			} else {
+				System.out.print(" - " + node.getValue());
+			}
+			printPreOrder(node.getLeft());
+			printPreOrder(node.getRight());
+		}
 	}
 
 	//complejidad:
 	//
-	public void printInOrden(){
-	
+	public void printInOrder() {
+		if (isEmpty()) {
+			System.out.println("Arbol vacío");
+		} else {
+			System.out.println("\nImpresión Pos Order");
+			printInOrder(this.root);
+		}
+	}
+
+	private void printInOrder(TreeNode node) {
+		if (node != null) {
+			printInOrder(node.getLeft());
+			System.out.print(" - " + node.getValue());
+			printInOrder(node.getRight());
+		}
 	}
 
 	//complejidad:
 	//
 	public List<Integer> getLongerBranch() {
-        ArrayList<Integer> longer = new ArrayList<>();
-        // Aquí puedes agregar elementos a la lista si es necesario
-        return longer;
-    }
+		List<Integer> actualBranch = new ArrayList<>();
+		List<Integer> longestBranch = new ArrayList<>();
+		getLongestBranch(root, actualBranch, longestBranch);
+		return longestBranch;
+	}
 
-	//complejidad:
-	//
-	public List<Integer> getFrontera(){
-		return null;
-		
+	private void getLongestBranch(TreeNode node, List<Integer> actualBranch, List<Integer> longestBranch) {
+		if (node == null) {
+			return;
+		}
+		actualBranch.add(node.getValue());
+		if (node.isLeaft()) {
+			if (actualBranch.size() > longestBranch.size()) {
+				longestBranch.clear();
+				longestBranch.addAll(actualBranch);
+			}
+		}
+		getLongestBranch(node.getLeft(), actualBranch, longestBranch);
+		getLongestBranch(node.getRight(), actualBranch, longestBranch);
+		actualBranch.remove(actualBranch.size() - 1);
 	}
 
 	//complejidad:
 	//
-	public void getMaxElem(){
-		
+	public List<Integer> getFrontier() {
+		List<Integer> frontier = new ArrayList<Integer>();
+		getFrontier(root, frontier);
+		return frontier;
+	}
+
+	private void getFrontier(TreeNode node, List<Integer> frontier) {
+		if (node == null) {
+			return;
+		}
+		if (node.isLeaft()) {
+			frontier.add(node.getValue());
+		}
+		getFrontier(node.getLeft(), frontier);
+		getFrontier(node.getRight(), frontier);
 	}
 
 	//complejidad:
 	//
-	public List<Integer> getElemAtLevel(int x){
-		return null;
+	public Integer getMaxElem() {
+		return getMaxElem(root);
+	}
 
+	private Integer getMaxElem(TreeNode node) {
+		if (node == null) {
+			return null;
+		}
+		if (node.getRight() == null) {
+			return node.getValue();
+		}
+		return getMaxElem(node.getRight());
+	}
+
+	//complejidad:
+	//
+	public List<Integer> getElemAtLevel(int level) {
+		List<Integer> listElements = new ArrayList<Integer>();
+		getElemAtLevel(root, 0, level, listElements);
+		return listElements;
+	}
+
+	private void getElemAtLevel(TreeNode node, int actualLevel, int level, List<Integer> listElements) {
+		if (node == null) {
+			return;
+		}
+		if (actualLevel == level) {
+			listElements.add(node.getValue());
+		}
+		actualLevel += 1;
+		getElemAtLevel(node.getLeft(), actualLevel, level, listElements);
+		getElemAtLevel(node.getRight(), actualLevel, level, listElements);
+		actualLevel -= 1;
 	}
 
 

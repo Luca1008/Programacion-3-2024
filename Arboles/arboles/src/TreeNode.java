@@ -5,9 +5,17 @@ public class TreeNode {
 	private Integer value;
 	private TreeNode left;
 	private TreeNode right;
+	private String character;
 
 	public TreeNode(Integer value) {
 		this.value = value;
+		this.left = null;
+		this.right = null;
+		this.setCharacter(null);
+	}
+	public TreeNode(Integer value, String character) {
+		this.value = value;
+		this.setCharacter(character);
 		this.left = null;
 		this.right = null;
 	}
@@ -34,6 +42,20 @@ public class TreeNode {
 	public void setValue(Integer x){
 		this.value=x;
 	}
+	public boolean isLeaft() {
+		return this.getLeft() == null && this.getRight() == null;
+	}
 
+	public String getCharacter() {
+		return character;
+	}
+
+	public void setCharacter(String character) {
+		this.character = character;
+	}
+	
+	public boolean hasCharacter() {
+		return this.character != null && !this.character.equals("");
+	}
 
 }

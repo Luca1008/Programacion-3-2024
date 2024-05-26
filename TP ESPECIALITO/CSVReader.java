@@ -10,7 +10,7 @@ public class CSVReader {
 	public CSVReader() {
 	}
 	
-	public void readTasks(String taskPath) {
+	public void readTasks(String taskPath, Tree<Tarea> tareas) {
 		
 		// Obtengo una lista con las lineas del archivo
 		// lines.get(0) tiene la primer linea del archivo
@@ -26,12 +26,12 @@ public class CSVReader {
 			Integer prioridad = Integer.parseInt(line[4].trim());
 			// Aca instanciar lo que necesiten en base a los datos leidos
 			Tarea tarea = new Tarea(id, nombre, tiempo, critica, prioridad);
-			System.out.println(tarea.getIdTarea());
+			tareas.add(id,tarea);
 		}
 		
 	}
 	
-	public void readProcessors(String processorPath) {
+	public void readProcessors(String processorPath, Tree<Procesador> procesadores) {
 		
 		// Obtengo una lista con las lineas del archivo
 		// lines.get(0) tiene la primer linea del archivo
@@ -46,7 +46,7 @@ public class CSVReader {
 			Integer anio = Integer.parseInt(line[3].trim());
 			// Aca instanciar lo que necesiten en base a los datos leidos
 			Procesador procesador = new Procesador(id, codigo, refrigerado, anio);
-			System.out.println(procesador.getCodigoProcesador());
+			procesadores.add(id, procesador);
 		}
 		
 	}

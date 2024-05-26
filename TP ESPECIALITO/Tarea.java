@@ -49,4 +49,15 @@ public class Tarea {
         this.nivelPrioridad = nivelPrioridad;
     }
     
+
+    @Override
+    public String toString() {
+        return "Tarea{" +
+                "id='" + idTarea + '\'' +
+                ", nombre='" + nombreTarea + '\'' +
+                ", tiempo=" + tiempoEjecucion +
+                ", critica=" + esCritica +
+                ", prioridad=" + nivelPrioridad +
+                '}';
+    }
 }

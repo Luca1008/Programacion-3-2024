@@ -55,4 +55,22 @@ public class Servicios {
           return conPrioridad;
      }
 
+     // Método para resolver el problema utilizando backtracking
+     public void resolverBacktracking(int maxTiempo) {
+          List<Procesador> listaProcesadores = procesadores.getAll();
+          List<Tarea> listaTareas = tareas.getAll();
+
+          SolucionBacktracking solucion = new SolucionBacktracking(listaProcesadores, listaTareas, maxTiempo);
+          solucion.resolver();
+ }
+
+ // Método para resolver el problema utilizando greedy
+     public void resolverGreedy(int maxTiempo) {
+          List<Procesador> listaProcesadores = procesadores.getAll();
+          List<Tarea> listaTareas = tareas.getAll();
+
+          SolucionGreedy solucion = new SolucionGreedy(listaProcesadores, listaTareas, maxTiempo);
+          solucion.resolver();
+ }
+
 }

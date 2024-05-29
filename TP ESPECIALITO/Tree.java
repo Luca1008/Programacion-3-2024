@@ -127,4 +127,18 @@ public class Tree<T> {
     }
 
 /////////////////////////////////////////////////////////////////////////////
+
+    public List<T> getAll() {
+        List<T> values = new ArrayList<>();
+        inOrderTraversal(root, values);
+        return values;
+    }
+
+    private void inOrderTraversal(TreeNode<T> node, List<T> values) {
+        if (node != null) {
+            inOrderTraversal(node.getLeft(), values);
+            values.add(node.getValue());
+            inOrderTraversal(node.getRight(), values);
+        }
+    }
 }

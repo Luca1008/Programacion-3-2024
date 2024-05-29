@@ -21,5 +21,19 @@ public class Main {
 			System.out.println("--------------------------------------------------------------------------------------------");
 //------------------Servicio 3--------------------------------			System.out.println("Servicio 3; Obtener todas las tareas entre 2 niveles de prioridad indicados.");
 			System.out.println(servicios.servicio3(10,90));
+
+			System.out.println("--------------------------------------------------------------------------------------------");
+
+			int maxTiempo = 100; // Ejemplo de tiempo máximo para procesadores no refrigerados
+			System.out.println("Resolución con Backtracking:");
+			servicios.resolverBacktracking(maxTiempo);
+
+			System.out.println("--------------------------------------------------------------------------------------------");
+
+			System.out.println("Resolución con Greedy:");
+			servicios.resolverGreedy(maxTiempo);
 	}
 }
+
+
+

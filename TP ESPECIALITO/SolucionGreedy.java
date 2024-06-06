@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -48,13 +47,18 @@ public class SolucionGreedy {
             Collections.sort(procesadores, (p1, p2) -> Integer.compare(p1.getTiempoTotal(), p2.getTiempoTotal()));
             
             // Intentar asignar la tarea al procesador con el menor tiempo total de ejecución
+            boolean tareaAsignada = false;
             for (Procesador procesador : procesadores) {
                 candidatosConsiderados++;
                 if (esValidaAsignacion(procesador, tarea)) {
                     procesador.asignarTarea(tarea);  // Asignar tarea al procesador
                     tareasAsignadas.add(tarea);  // Añadir tarea a la lista de tareas asignadas
+                    tareaAsignada = true;
                     break;  // Salir del bucle una vez que la tarea ha sido asignada
                 }
+            }
+            if (!tareaAsignada) {
+                System.out.println("No se pudo asignar la tarea: " + tarea);
             }
         }
 

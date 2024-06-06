@@ -59,6 +59,9 @@ public class Servicios {
      public void resolverBacktracking(int maxTiempo) {
           List<Procesador> listaProcesadores = procesadores.getAll();
           List<Tarea> listaTareas = tareas.getAll();
+          for(Procesador procesador : listaProcesadores){
+               procesador.limpiarTareas();
+          }
 
           SolucionBacktracking solucion = new SolucionBacktracking(listaProcesadores, listaTareas, maxTiempo);
           solucion.resolver();
@@ -68,7 +71,9 @@ public class Servicios {
      public void resolverGreedy(int maxTiempo) {
           List<Procesador> listaProcesadores = procesadores.getAll();
           List<Tarea> listaTareas = tareas.getAll();
-
+          for(Procesador procesador : listaProcesadores){
+               procesador.limpiarTareas();
+          }
           SolucionGreedy solucion = new SolucionGreedy(listaProcesadores, listaTareas, maxTiempo);
           solucion.resolver();
  }

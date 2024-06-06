@@ -26,7 +26,7 @@ public class Main {
 
 			int maxTiempo = 100; // Ejemplo de tiempo máximo para procesadores no refrigerados
 			System.out.println("Resolución con Backtracking:");
-			servicios.resolverBacktracking(maxTiempo);
+			servicios.resolverBacktracking(maxTiempo);0
 
 			System.out.println("--------------------------------------------------------------------------------------------");
 

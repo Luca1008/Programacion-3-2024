@@ -63,6 +63,11 @@ public class Procesador {
     public int getNumTareasCriticas() {
         return (int) tareasAsignadas.stream().filter(Tarea::isEsCritica).count();
     }
+
+     // Método para vaciar la lista de tareas
+     public void limpiarTareas() {
+        tareasAsignadas.clear();
+    }
     
 
     @Override

@@ -1,4 +1,6 @@
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -39,18 +41,25 @@ public class SolucionGreedy {
      * Algoritmo greedy para asignar tareas a procesadores.
      */
     public void resolver() {
+        List<Tarea> tareasAsignadas = new ArrayList<>(); // Lista de tareas ya asignadas
+        
         for (Tarea tarea : tareas) {
             // Ordenar procesadores por tiempo total de ejecución actual (de menor a mayor)
             Collections.sort(procesadores, (p1, p2) -> Integer.compare(p1.getTiempoTotal(), p2.getTiempoTotal()));
+            
             // Intentar asignar la tarea al procesador con el menor tiempo total de ejecución
             for (Procesador procesador : procesadores) {
                 candidatosConsiderados++;
                 if (esValidaAsignacion(procesador, tarea)) {
                     procesador.asignarTarea(tarea);  // Asignar tarea al procesador
+                    tareasAsignadas.add(tarea);  // Añadir tarea a la lista de tareas asignadas
                     break;  // Salir del bucle una vez que la tarea ha sido asignada
                 }
             }
         }
+
+        // Eliminar tareas asignadas de la lista original de tareas
+        tareas.removeAll(tareasAsignadas);
 
         System.out.println("Solución obtenida (Greedy):");
         for (Procesador procesador : procesadores) {

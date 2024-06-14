@@ -1,4 +1,3 @@
-package viajante;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -7,7 +6,7 @@ import java.util.List;
 /**
  * Ejercicio 6 Problema del viajante. Dado un grafo ponderado de ciudades
  * conectadas todas con todas, implemente un algoritmo que brinde una
- * aproximación al problema del viajante
+ * aproximaciï¿½n al problema del viajante
  * 
  * @author Gentil Ricardo
  *

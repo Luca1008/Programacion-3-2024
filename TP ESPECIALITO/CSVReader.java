@@ -3,14 +3,22 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
-
+/**
+ * Clase para leer datos de archivos CSV y cargarlos en estructuras de datos.
+ */
 public class CSVReader {
 
 	public CSVReader() {
 	}
-	
-	public void readTasks(String taskPath, Tree<Tarea> tareas) {
+	/**
+     * Lee tareas desde un archivo CSV y las carga en un árbol y un HashMap.
+     * @param taskPath Ruta del archivo CSV de tareas.
+     * @param tareas Árbol donde se almacenarán las tareas.
+     * @param tareaMap HashMap donde se almacenarán las tareas.
+     */
+	public void readTasks(String taskPath, Tree<Tarea> tareas, HashMap<String, Tarea> tareaMap) {
 		
 		// Obtengo una lista con las lineas del archivo
 		// lines.get(0) tiene la primer linea del archivo
@@ -27,11 +35,17 @@ public class CSVReader {
 			// Aca instanciar lo que necesiten en base a los datos leidos
 			Tarea tarea = new Tarea(id, nombre, tiempo, critica, prioridad);
 			tareas.add(id,tarea);
+			tareaMap.put(id, tarea);
 		}
 		
 	}
-	
-	public void readProcessors(String processorPath, Tree<Procesador> procesadores) {
+	/**
+     * Lee procesadores desde un archivo CSV y los carga en un árbol y un HashMap.
+     * @param processorPath Ruta del archivo CSV de procesadores.
+     * @param procesadores Árbol donde se almacenarán los procesadores.
+     * @param procesadorMap HashMap donde se almacenarán los procesadores.
+     */
+	public void readProcessors(String processorPath, Tree<Procesador> procesadores, HashMap<String, Procesador> procesadorMap) {
 		
 		// Obtengo una lista con las lineas del archivo
 		// lines.get(0) tiene la primer linea del archivo
@@ -47,6 +61,7 @@ public class CSVReader {
 			// Aca instanciar lo que necesiten en base a los datos leidos
 			Procesador procesador = new Procesador(id, codigo, refrigerado, anio);
 			procesadores.add(id, procesador);
+			procesadorMap.put(id, procesador);
 		}
 		
 	}

@@ -1,3 +1,6 @@
+/**
+ * Clase que representa una tarea.
+ */
 public class Tarea {
     private String idTarea;
     private String nombreTarea;
@@ -5,9 +8,14 @@ public class Tarea {
     private boolean esCritica;
     private Integer nivelPrioridad;
 
-    public Tarea() {
-    }
-
+    /**
+     * Constructor para crear una nueva tarea.
+     * @param idTarea Identificador de la tarea.
+     * @param nombreTarea Nombre de la tarea.
+     * @param tiempoEjecucion Tiempo de ejecución de la tarea.
+     * @param esCritica Indica si la tarea es crítica.
+     * @param nivelPrioridad Nivel de prioridad de la tarea.
+     */
     public Tarea(String idTarea, String nombreTarea, Integer tiempoEjecucion, boolean esCritica, Integer nivelPrioridad) {
         this.idTarea = idTarea;
         this.nombreTarea = nombreTarea;
@@ -19,45 +27,27 @@ public class Tarea {
     public String getIdTarea() {
         return idTarea;
     }
+
     public String getNombreTarea() {
         return nombreTarea;
     }
+
     public Integer getTiempoEjecucion() {
         return tiempoEjecucion;
     }
+
     public boolean isEsCritica() {
         return esCritica;
     }
+
     public Integer getNivelPrioridad() {
         return nivelPrioridad;
     }
 
-
-    public void setIdTarea(String idTarea) {
-        this.idTarea = idTarea;
-    }
-    public void setNombreTarea(String nombreTarea) {
-        this.nombreTarea = nombreTarea;
-    }
-    public void setTiempoEjecucion(Integer tiempoEjecucion) {
-        this.tiempoEjecucion = tiempoEjecucion;
-    }
-    public void setEsCritica(boolean esCritica) {
-        this.esCritica = esCritica;
-    }
-    public void setNivelPrioridad(Integer nivelPrioridad) {
-        this.nivelPrioridad = nivelPrioridad;
-    }
-    
-
     @Override
     public String toString() {
-        return "Tarea{" +
-                "id='" + idTarea + '\'' +
-                ", nombre='" + nombreTarea + '\'' +
-                ", tiempo=" + tiempoEjecucion +
-                ", critica=" + esCritica +
-                ", prioridad=" + nivelPrioridad +
-                '}';
+        return "Tarea{id='" + idTarea + "', nombre='" + nombreTarea + "', tiempo=" + tiempoEjecucion +
+                ", critica=" + esCritica + ", prioridad=" + nivelPrioridad + "}";
     }
 }
+

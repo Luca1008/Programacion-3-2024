@@ -1,81 +1,122 @@
-import java.util.List;
+import java.util.*;
 
 /**
- * NO modificar la interfaz de esta clase ni sus métodos públicos.
- * Sólo se podrá adaptar el nombre de la clase "Tarea" según sus decisiones
- * de implementación.
+ * Clase que proporciona servicios para manipular tareas y procesadores.
  */
 public class Servicios {
      private Tree<Tarea> tareas;
      private Tree<Procesador> procesadores;
-	/*
-     * Expresar la complejidad temporal del constructor.
-     * Posee la complejidad de en el peor de los casos en que arbol este desbalanceado
-     * la complejidad seria O(n2 + m2)
-     */
-	public Servicios(String pathProcesadores, String pathTareas){
-          procesadores = new Tree<>();
-          tareas = new Tree<>();
-		CSVReader reader = new CSVReader();
-		reader.readProcessors(pathProcesadores, procesadores);
-		reader.readTasks(pathTareas, tareas);
-	}
-	
-	/*
-     * Expresar la complejidad temporal del servicio 1.
-     * Dado un identificador de tarea obtener toda la información de la tarea asociada
-     La complejidad temporal de esta implementación es O(h), en donde hs la altura del árbol,
-     en el peor de los casos h 0 n por lo que la complejidad en O(n),
-     pero si esta balanceado la complejidad pasa a ser O(log n)
-     */
-	public Tarea servicio1(String ID) {
-          return tareas.get(ID);
-     }
-    
-    /*
-     * Expresar la complejidad temporal del servicio 2.
-     * Permitir que el usuario decida si quiere ver todas las tareas críticas o no críticas y generar
-     el listado apropiado resultante.
-     La complejidad temporal de esta implementación es O(n),
-     ya que se realiza una búsqueda en profundidad (DFS) y se visita cada nodo del árbol una vez.
-     */
-	public List<Tarea> servicio2(boolean esCritica) {
-          List<Tarea> criticas = tareas.getCriticas(esCritica);
-          return criticas;
+     private HashMap<String, Tarea> tareaMap;
+     private List<Tarea> tareasCriticas;
+     private List<Tarea> tareasNoCriticas;
+     private TreeMap<Integer, List<Tarea>> prioridadMap;
+
+     /**
+      * Constructor que carga datos desde archivos CSV.
+      * 
+      * @param pathProcesadores Ruta del archivo CSV de procesadores.
+      * @param pathTareas       Ruta del archivo CSV de tareas.
+      */
+     public Servicios(String pathProcesadores, String pathTareas) {
+          this.procesadores = new Tree<>();
+          this.tareas = new Tree<>();
+          this.tareaMap = new HashMap<>();
+          this.tareasCriticas = new ArrayList<>();
+          this.tareasNoCriticas = new ArrayList<>();
+          this.prioridadMap = new TreeMap<>();
+
+          CSVReader reader = new CSVReader();
+          reader.readProcessors(pathProcesadores, procesadores, new HashMap<>());
+          reader.readTasks(pathTareas, tareas, tareaMap);
+
+          for (Tarea tarea : tareaMap.values()) {
+               if (tarea.isEsCritica()) {
+                    tareasCriticas.add(tarea);
+               } else {
+                    tareasNoCriticas.add(tarea);
+               }
+               int prioridad = tarea.getNivelPrioridad();
+               prioridadMap.putIfAbsent(prioridad, new ArrayList<>());
+               prioridadMap.get(prioridad).add(tarea);
+          }
      }
 
-    /*
-     * Expresar la complejidad temporal del servicio 3.
-     * Obtener todas las tareas entre 2 niveles de prioridad indicados.
-     La complejidad temporal de esta implementación también es o(n),
-     a que se realiza una búsqueda en profundidad (DFS) y se visita cada nodo del árbol una vez.
-     */
-	public List<Tarea> servicio3(int prioridadInferior, int prioridadSuperior) {
-          List<Tarea> conPrioridad = tareas.getTareasEntrePrioridades(prioridadInferior, prioridadSuperior);
-          return conPrioridad;
+     /**
+      * Servicio 1: Dado un identificador de tarea obtener toda la información de la
+      * tarea asociada.
+      * Complejidad: O(1) debido a la búsqueda en el HashMap.
+      * 
+      * @param ID Identificador de la tarea.
+      * @return Tarea asociada al identificador.
+      */
+     public Tarea servicio1(String ID) {
+          return tareaMap.get(ID);
      }
 
-     // Método para resolver el problema utilizando backtracking
+     /**
+      * Servicio 2: Permitir que el usuario decida si quiere ver todas las tareas
+      * críticas o no críticas
+      * y generar el listado apropiado resultante.
+      * Complejidad: O(1) para devolver la lista correspondiente.
+      * 
+      * @param esCritica Indica si se desean listar tareas críticas (true) o no
+      *                  críticas (false).
+      * @return Lista de tareas críticas o no críticas.
+      */
+     public List<Tarea> servicio2(boolean esCritica) {
+          return esCritica ? tareasCriticas : tareasNoCriticas;
+     }
+
+     /**
+      * Servicio 3: Obtener todas las tareas entre 2 niveles de prioridad indicados.
+      * Complejidad: O(log n + k) donde n es el número de prioridades distintas y k
+      * el número de tareas en el rango.
+      * 
+      * @param prioridadInferior Límite inferior del rango de prioridad.
+      * @param prioridadSuperior Límite superior del rango de prioridad.
+      * @return Lista de tareas en el rango de prioridad.
+      */
+     public List<Tarea> servicio3(int prioridadInferior, int prioridadSuperior) {
+          List<Tarea> resultado = new ArrayList<>();
+          NavigableMap<Integer, List<Tarea>> subMap = prioridadMap.subMap(prioridadInferior, true, prioridadSuperior,
+                    true);
+          for (List<Tarea> listaTareas : subMap.values()) {
+               resultado.addAll(listaTareas);
+          }
+          return resultado;
+     }
+
+     /**
+      * Resuelve el problema de asignación de tareas a procesadores utilizando el
+      * algoritmo de backtracking.
+      * 
+      * @param maxTiempo Tiempo máximo de ejecución permitido para procesadores no
+      *                  refrigerados.
+      */
      public void resolverBacktracking(int maxTiempo) {
           List<Procesador> listaProcesadores = procesadores.getAll();
-          List<Tarea> listaTareas = tareas.getAll();
-          for(Procesador procesador : listaProcesadores){
+          List<Tarea> listaTareas = new ArrayList<>(tareaMap.values());
+          for (Procesador procesador : listaProcesadores) {
                procesador.limpiarTareas();
           }
-
           SolucionBacktracking solucion = new SolucionBacktracking(listaProcesadores, listaTareas, maxTiempo);
           solucion.resolver();
- }
+     }
 
- // Método para resolver el problema utilizando greedy
+     /**
+      * Resuelve el problema de asignación de tareas a procesadores utilizando el
+      * algoritmo greedy.
+      * 
+      * @param maxTiempo Tiempo máximo de ejecución permitido para procesadores no
+      *                  refrigerados.
+      */
      public void resolverGreedy(int maxTiempo) {
           List<Procesador> listaProcesadores = procesadores.getAll();
-          List<Tarea> listaTareas = tareas.getAll();
-          for(Procesador procesador : listaProcesadores){
+          List<Tarea> listaTareas = new ArrayList<>(tareaMap.values());
+          for (Procesador procesador : listaProcesadores) {
                procesador.limpiarTareas();
           }
           SolucionGreedy solucion = new SolucionGreedy(listaProcesadores, listaTareas, maxTiempo);
           solucion.resolver();
- }
-
+     }
 }

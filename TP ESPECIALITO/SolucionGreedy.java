@@ -1,18 +1,22 @@
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
- * Solución Greedy
- * Estrategia: Asignar cada tarea al procesador con el menor tiempo total de ejecución actual,
- * respetando las restricciones.
+ * Clase que implementa la solución de asignación de tareas a procesadores utilizando el algoritmo greedy.
  */
 public class SolucionGreedy {
-    private List<Procesador> procesadores;  // Lista de procesadores disponibles
-    private List<Tarea> tareas;  // Lista de tareas a asignar
-    private int maxTiempo;  // Tiempo máximo de ejecución permitido para procesadores no refrigerados
-    private int candidatosConsiderados;  // Contador de candidatos considerados durante la asignación
+    private List<Procesador> procesadores;
+    private List<Tarea> tareas;
+    private int maxTiempo;
+    private int candidatosConsiderados;
 
+    /**
+     * Constructor para inicializar la solución greedy.
+     * @param procesadores Lista de procesadores disponibles.
+     * @param tareas Lista de tareas a asignar.
+     * @param maxTiempo Tiempo máximo de ejecución permitido para procesadores no refrigerados.
+     */
     public SolucionGreedy(List<Procesador> procesadores, List<Tarea> tareas, int maxTiempo) {
         this.procesadores = procesadores;
         this.tareas = tareas;
@@ -22,14 +26,15 @@ public class SolucionGreedy {
 
     /**
      * Verifica si la asignación de una tarea a un procesador es válida según las restricciones.
+     * @param procesador Procesador al que se quiere asignar la tarea.
+     * @param tarea Tarea que se quiere asignar.
+     * @return True si la asignación es válida, false en caso contrario.
      */
     public boolean esValidaAsignacion(Procesador procesador, Tarea tarea) {
         int tiempoTotal = procesador.getTiempoTotal() + tarea.getTiempoEjecucion();
-        // Restricción 1: Procesadores no refrigerados no pueden exceder el tiempo máximo
         if (!procesador.getEstaRefrigerado() && tiempoTotal > maxTiempo) {
             return false;
         }
-        // Restricción 2: Procesadores no pueden tener más de 2 tareas críticas
         if (tarea.isEsCritica() && procesador.getNumTareasCriticas() >= 2) {
             return false;
         }
@@ -37,33 +42,27 @@ public class SolucionGreedy {
     }
 
     /**
-     * Algoritmo greedy para asignar tareas a procesadores.
+     * Método para resolver el problema utilizando el algoritmo greedy.
      */
     public void resolver() {
-        List<Tarea> tareasAsignadas = new ArrayList<>(); // Lista de tareas ya asignadas
-        
+        Collections.sort(tareas, Comparator.comparingInt(Tarea::getTiempoEjecucion).reversed());
+
         for (Tarea tarea : tareas) {
-            // Ordenar procesadores por tiempo total de ejecución actual (de menor a mayor)
-            Collections.sort(procesadores, (p1, p2) -> Integer.compare(p1.getTiempoTotal(), p2.getTiempoTotal()));
-            
-            // Intentar asignar la tarea al procesador con el menor tiempo total de ejecución
+            Collections.sort(procesadores, Comparator.comparingInt(Procesador::getTiempoTotal));
+
             boolean tareaAsignada = false;
             for (Procesador procesador : procesadores) {
                 candidatosConsiderados++;
                 if (esValidaAsignacion(procesador, tarea)) {
-                    procesador.asignarTarea(tarea);  // Asignar tarea al procesador
-                    tareasAsignadas.add(tarea);  // Añadir tarea a la lista de tareas asignadas
+                    procesador.asignarTarea(tarea);
                     tareaAsignada = true;
-                    break;  // Salir del bucle una vez que la tarea ha sido asignada
+                    break;
                 }
             }
             if (!tareaAsignada) {
                 System.out.println("No se pudo asignar la tarea: " + tarea);
             }
         }
-
-        // Eliminar tareas asignadas de la lista original de tareas
-        tareas.removeAll(tareasAsignadas);
 
         System.out.println("Solución obtenida (Greedy):");
         for (Procesador procesador : procesadores) {
@@ -75,6 +74,7 @@ public class SolucionGreedy {
 
     /**
      * Calcula el tiempo máximo de ejecución entre todos los procesadores.
+     * @return Tiempo máximo de ejecución.
      */
     private int getMaxTiempo() {
         int max = 0;

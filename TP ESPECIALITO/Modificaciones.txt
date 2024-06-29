@@ -1,0 +1,38 @@
+Comparación entre el Código Original y las Mejoras Implementadas
+Código Original
+El código original presentaba una estructura básica para la asignación de tareas a procesadores utilizando algoritmos greedy y backtracking. Sin embargo, tenía algunas deficiencias en términos de eficiencia y organización. Aquí están los principales problemas detectados:
+
+Ineficiencia en los Servicios:
+
+Servicio 1: Utilizaba un Tree para buscar tareas por su identificador, lo cual tiene una complejidad de O(log n) en el mejor de los casos. Para búsquedas rápidas, es más eficiente utilizar un HashMap con complejidad O(1).
+Servicio 2: La búsqueda de tareas críticas y no críticas también se realizaba recorriendo el Tree, lo que no es óptimo en términos de eficiencia.
+Servicio 3: La obtención de tareas entre niveles de prioridad tenía una complejidad alta debido al recorrido del Tree.
+Algoritmo de Backtracking:
+
+El algoritmo no encontraba la mejor solución posible, ya que se quedaba con la primera solución válida encontrada, sin explorar todas las posibles combinaciones.
+Algoritmo Greedy:
+
+No ordenaba las tareas antes de asignarlas, lo cual podía llevar a asignaciones subóptimas.
+Falta de Manejo de Excepciones:
+
+El manejo de excepciones en CSVReader no garantizaba el cierre de recursos, lo que podía llevar a fugas de memoria.
+Mejoras Implementadas
+Optimización de los Servicios:
+
+Servicio 1: Se cambió a utilizar un HashMap para almacenar y buscar tareas por su identificador. Esto permite búsquedas en tiempo constante O(1).
+Servicio 2: Se crearon listas separadas para tareas críticas y no críticas. Esto permite devolver la lista correspondiente en tiempo constante O(1).
+Servicio 3: Se utilizó un TreeMap para manejar rangos de prioridad de manera eficiente, mejorando la complejidad a O(log n + k), donde n es el número de niveles de prioridad y k es el número de tareas en el rango.
+Algoritmo de Backtracking Mejorado:
+
+Se implementó una búsqueda exhaustiva para encontrar la mejor solución posible. Esto implica explorar todas las combinaciones de asignación de tareas y seleccionar la solución óptima.
+Se añadió un método de copia profunda (deepCopy) para almacenar la mejor solución encontrada durante la búsqueda.
+Algoritmo Greedy Mejorado:
+
+Se añadió la ordenación de tareas por tiempo de ejecución antes de asignarlas a los procesadores. Esto mejora la calidad de la solución al asignar primero las tareas más largas, evitando acumulaciones de tiempo en un solo procesador.
+Mejor Manejo de Excepciones:
+
+Se mejoró el manejo de excepciones en CSVReader utilizando try-with-resources para asegurar el cierre de recursos.
+Documentación y Buenas Prácticas:
+
+Se añadió documentación detallada para todas las clases y métodos, explicando su propósito y complejidad computacional.
+Se siguieron convenciones de nombres consistentes y se mejoró el formato del código para mayor claridad y mantenibilidad.

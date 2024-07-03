@@ -34,13 +34,19 @@ public class SolucionBacktracking {
      * @return True si la asignación es válida, false en caso contrario.
      */
     public boolean esValidaAsignacion(Procesador procesador, Tarea tarea) {
+        // Calcula el tiempo total si se asigna la tarea al procesador
         int tiempoTotal = procesador.getTiempoTotal() + tarea.getTiempoEjecucion();
+        
+        // Verifica si el procesador no refrigerado excede el tiempo máximo permitido
         if (!procesador.getEstaRefrigerado() && tiempoTotal > maxTiempo) {
             return false;
         }
+        
+        // Verifica si el procesador tiene más de 2 tareas críticas asignadas
         if (tarea.isEsCritica() && procesador.getNumTareasCriticas() >= 2) {
             return false;
         }
+        
         return true;
     }
 
@@ -50,20 +56,28 @@ public class SolucionBacktracking {
      */
     public void backtracking(int index) {
         estadosGenerados++;
+        
+        // Caso base: todas las tareas han sido asignadas
         if (index == tareas.size()) {
             int tiempoTotal = getMaxTiempo();
+            // Actualiza la mejor solución si se encuentra una mejor
             if (tiempoTotal < mejorTiempoTotal) {
                 mejorTiempoTotal = tiempoTotal;
                 mejorSolucion = deepCopy(procesadores);
             }
             return;
         }
+        
         Tarea tarea = tareas.get(index);
+        
+        // Intentar asignar la tarea actual a cada procesador
         for (Procesador procesador : procesadores) {
             if (esValidaAsignacion(procesador, tarea)) {
-                procesador.asignarTarea(tarea);
-                backtracking(index + 1);
-                procesador.desasignarTarea(tarea);
+                procesador.asignarTarea(tarea);  // Asignar tarea al procesador
+                
+                backtracking(index + 1);  // Llamada recursiva para asignar la siguiente tarea
+                
+                procesador.desasignarTarea(tarea);  // Desasignar tarea si no se encuentra una solución válida
             }
         }
     }
@@ -75,15 +89,20 @@ public class SolucionBacktracking {
      */
     private List<Procesador> deepCopy(List<Procesador> procesadores) {
         List<Procesador> copia = new ArrayList<>();
+        
+        // Realiza una copia profunda de cada procesador y sus tareas asignadas
         for (Procesador procesador : procesadores) {
             Procesador nuevoProcesador = new Procesador(procesador.getIdProcesador(), procesador.getCodigoProcesador(),
                     procesador.getEstaRefrigerado(), procesador.getAnioFuncionamiento());
+            
             for (Tarea tarea : procesador.getTareasAsignadas()) {
                 nuevoProcesador.asignarTarea(new Tarea(tarea.getIdTarea(), tarea.getNombreTarea(), tarea.getTiempoEjecucion(),
                         tarea.isEsCritica(), tarea.getNivelPrioridad()));
             }
+            
             copia.add(nuevoProcesador);
         }
+        
         return copia;
     }
 
@@ -91,12 +110,15 @@ public class SolucionBacktracking {
      * Método para resolver el problema utilizando backtracking.
      */
     public void resolver() {
-        backtracking(0);
+        backtracking(0);  // Inicia el backtracking desde la primera tarea
+        
         if (mejorSolucion != null) {
             System.out.println("Solución obtenida (Backtracking):");
+            
             for (Procesador procesador : mejorSolucion) {
                 System.out.println(procesador);
             }
+            
             System.out.println("Tiempo máximo de ejecución: " + mejorTiempoTotal);
             System.out.println("Cantidad de estados generados: " + estadosGenerados);
         } else {
@@ -110,9 +132,12 @@ public class SolucionBacktracking {
      */
     private int getMaxTiempo() {
         int max = 0;
+        
+        // Encuentra el tiempo máximo de ejecución entre todos los procesadores
         for (Procesador procesador : procesadores) {
             max = Math.max(max, procesador.getTiempoTotal());
         }
+        
         return max;
     }
 }
